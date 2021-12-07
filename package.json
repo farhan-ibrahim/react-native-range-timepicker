@@ -146,8 +146,7 @@
   },
   "dependencies": {
     "react-native-gesture-handler": "^2.0.0",
-    "react-native-modalize": "^2.0.12",
-    "react-native-picker-scrollview": "^1.0.1",
-    "react-native-portalize": "^1.0.7"
+    "react-native-modal": "^13.0.0",
+    "react-native-picker-scrollview": "^1.0.1"
   }
 }
