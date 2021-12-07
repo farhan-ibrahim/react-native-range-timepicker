@@ -146,7 +146,7 @@
   },
   "dependencies": {
     "react-native-modalize": "^2.0.12",
-    "react-native-portalize": "^1.0.7",
-    "react-native-wheel-scrollview-picker": "^1.2.2"
+    "react-native-picker-scrollview": "^1.0.1",
+    "react-native-portalize": "^1.0.7"
   }
 }
