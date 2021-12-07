@@ -10,11 +10,11 @@ export default function App() {
   const onSelect = ({ startTime, endTime }: any) => {
     setStart(startTime);
     setEnd(endTime);
+    setVisible(false);
   };
 
   const onReset = () => {
-    setStart('');
-    setEnd('');
+    setVisible(false);
   };
 
   const getLocaleTime = (time: string) => {
