@@ -1,6 +1,5 @@
-import React, { useEffect, useRef, useState } from 'react';
-import { Modalize } from 'react-native-modalize';
-import { Portal } from 'react-native-portalize';
+import React, { useEffect, useState } from 'react';
+import Modal from 'react-native-modal';
 import { View, StyleSheet, TouchableOpacity, Text } from 'react-native';
 import { Colors } from './Themes';
 import TimePicker from './Timepicker';
@@ -15,10 +14,11 @@ export type RangeTimePickerProps = {
 const TimeRangePicker: React.FC<RangeTimePickerProps> = (
   props: RangeTimePickerProps
 ) => {
-  const [selectedStartTime, setSelectedStartTime] = useState('');
-  const [selectedEndTime, setSelectedEndTime] = useState('');
-  const [isValid, setIsValid] = useState(true);
-  const modalRef = useRef<Modalize>(null);
+  const [selectedStartTime, setSelectedStartTime] = useState<string>('');
+  const [selectedEndTime, setSelectedEndTime] = useState<string>('');
+  const [isValid, setIsValid] = useState<boolean>(true);
+  const [isVisible, setIsVisible] = useState<boolean>(true);
+  const [isChanged, setIsChanged] = useState<boolean>(false);
 
   const onChangeStartTime = (value: string) => {
     setSelectedStartTime(value);
@@ -32,7 +32,7 @@ const TimeRangePicker: React.FC<RangeTimePickerProps> = (
     setSelectedStartTime('');
     setSelectedEndTime('');
     props.onReset();
-    modalRef.current?.close();
+    setIsVisible(false);
   };
 
   const onConfirm = () => {
@@ -40,7 +40,7 @@ const TimeRangePicker: React.FC<RangeTimePickerProps> = (
       startTime: selectedStartTime,
       endTime: selectedEndTime,
     });
-    modalRef.current?.close();
+    setIsVisible(false);
   };
 
   // check if endTime is after startTime
@@ -49,6 +49,15 @@ const TimeRangePicker: React.FC<RangeTimePickerProps> = (
     let endTimeMinute = selectedEndTime.substring(3, 5);
     let startTimeHour = selectedStartTime.substring(0, 2);
     let startTimeMinute = selectedStartTime.substring(3, 5);
+
+    // if no endTime is selected, set isValid to true
+    if (selectedStartTime === '00:00:00' || selectedEndTime === '00:00:00') {
+      setIsChanged(false);
+      setIsValid(false);
+      return;
+    } else {
+      setIsChanged(true);
+    }
 
     // if endTimeHour less than startTimeHour
     if (Number(endTimeHour) < Number(startTimeHour)) {
@@ -64,58 +73,73 @@ const TimeRangePicker: React.FC<RangeTimePickerProps> = (
   }, [selectedStartTime, selectedEndTime]);
 
   useEffect(() => {
-    if (props.visible) {
-      modalRef.current?.open();
+    if (props.visible && !isVisible) {
+      setIsVisible(true);
     } else {
-      modalRef.current?.close();
+      setIsVisible(false);
     }
-  }, [props.visible]);
+  }, [props.visible, isVisible]);
 
   return (
-    <Portal>
-      <Modalize
-        adjustToContentHeight
-        ref={modalRef}
-        handlePosition={'inside'}
-        scrollViewProps={{ keyboardShouldPersistTaps: 'handled' }}
+    <View>
+      <Modal
+        isVisible={props.visible}
+        onBackdropPress={() => setIsVisible(false)}
+        animationInTiming={800}
+        animationOutTiming={800}
+        style={styles.modal}
       >
-        <View style={styles.header}>
-          <Text style={styles.boldCenterText}>{props.title || ''}</Text>
-          <Text style={styles.warningText}>
-            {isValid ? '' : 'End time must be greater than start time'}
-          </Text>
-          <View style={styles.label}>
-            <Text style={styles.boldCenterText}>START</Text>
-            <Text style={styles.boldCenterText}>END</Text>
+        <View style={styles.container}>
+          <View style={styles.header}>
+            <Text style={styles.boldCenterText}>{props.title || ''}</Text>
+            <Text style={styles.warningText}>
+              {!isValid && isChanged
+                ? 'End time must be greater than start time'
+                : ''}
+            </Text>
+            <View style={styles.label}>
+              <Text style={styles.boldCenterText}>START</Text>
+              <Text style={styles.boldCenterText}>END</Text>
+            </View>
+          </View>
+          <View style={styles.pickerContainer}>
+            <TimePicker onChangeValue={onChangeStartTime} />
+            <TimePicker onChangeValue={onChangeEndTime} />
+          </View>
+          <View style={styles.footer}>
+            <TouchableOpacity onPress={onReset}>
+              <Text>Cancel</Text>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={onConfirm} disabled={!isValid}>
+              <Text
+                style={[
+                  styles.boldCenterText,
+                  {
+                    color: isValid ? Colors.black : Colors.red,
+                  },
+                ]}
+              >
+                Save
+              </Text>
+            </TouchableOpacity>
           </View>
         </View>
-        <View style={styles.pickerContainer}>
-          <TimePicker onChangeValue={onChangeStartTime} />
-          <TimePicker onChangeValue={onChangeEndTime} />
-        </View>
-        <View style={styles.footer}>
-          <TouchableOpacity onPress={onReset}>
-            <Text>Cancel</Text>
-          </TouchableOpacity>
-          <TouchableOpacity onPress={onConfirm} disabled={!isValid}>
-            <Text
-              style={[
-                styles.boldCenterText,
-                {
-                  color: isValid ? Colors.black : Colors.red,
-                },
-              ]}
-            >
-              Save
-            </Text>
-          </TouchableOpacity>
-        </View>
-      </Modalize>
-    </Portal>
+      </Modal>
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
+  modal: {
+    flex: 1,
+    justifyContent: 'flex-end',
+    margin: 0,
+  },
+  container: {
+    backgroundColor: Colors.white,
+    borderTopStartRadius: 20,
+    borderTopEndRadius: 20,
+  },
   header: {
     paddingTop: 20,
   },
@@ -137,6 +161,7 @@ const styles = StyleSheet.create({
     borderTopColor: Colors.grey,
   },
   boldCenterText: {
+    fontSize: 16,
     fontWeight: 'bold',
     textAlign: 'center',
   },
