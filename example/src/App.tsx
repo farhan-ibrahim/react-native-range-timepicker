@@ -1,5 +1,4 @@
 import * as React from 'react';
-
 import { StyleSheet, View, Text, TouchableOpacity } from 'react-native';
 import TimeRangePicker from 'react-native-range-timepicker';
 
@@ -46,11 +45,14 @@ export default function App() {
 
   return (
     <View style={styles.container}>
-      <TouchableOpacity onPress={() => setVisible(true)}>
-        <Text>PICK TIME RANGE</Text>
-        <View style={styles.time}>
-          <Text>{`${getLocaleTime(start)} - ${getLocaleTime(end)}`}</Text>
-        </View>
+      <View style={styles.timeContainer}>
+        <Text style={styles.text}>Time selected</Text>
+        <Text style={styles.text}>{`${getLocaleTime(start)} - ${getLocaleTime(
+          end
+        )}`}</Text>
+      </View>
+      <TouchableOpacity style={styles.button} onPress={() => setVisible(true)}>
+        <Text style={styles.buttonText}>CLICK TO PICK TIME RANGE</Text>
       </TouchableOpacity>
       <TimeRangePicker
         visible={visible}
@@ -64,15 +66,31 @@ export default function App() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    paddingTop: 100,
     alignItems: 'center',
     justifyContent: 'center',
   },
-  time: {
-    marginLeft: 'auto',
+  timeContainer: {
+    padding: 20,
+  },
+  button: {
+    padding: 10,
+    backgroundColor: 'red',
     borderColor: '#A8A8A8',
     borderRadius: 8,
-    borderWidth: 0.5,
-    paddingHorizontal: 20,
-    paddingVertical: 2,
+    borderWidth: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  text: {
+    color: '#000000',
+    textAlign: 'center',
+    fontSize: 20,
+  },
+  buttonText: {
+    color: '#FFFFFF',
+    fontWeight: 'bold',
+    textAlign: 'center',
+    fontSize: 20,
   },
 });
