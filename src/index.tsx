@@ -78,12 +78,12 @@ const TimeRangePicker: React.FC<RangeTimePickerProps> = (
     } else {
       setIsVisible(false);
     }
-  }, [props.visible, isVisible]);
+  }, [props.visible]);
 
   return (
     <View>
       <Modal
-        isVisible={props.visible}
+        isVisible={isVisible}
         onBackdropPress={() => setIsVisible(false)}
         animationInTiming={800}
         animationOutTiming={800}
