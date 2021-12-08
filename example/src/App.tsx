@@ -13,7 +13,7 @@ export default function App() {
     setVisible(false);
   };
 
-  const onReset = () => {
+  const onClose = () => {
     setVisible(false);
   };
 
@@ -56,7 +56,7 @@ export default function App() {
       </TouchableOpacity>
       <TimeRangePicker
         visible={visible}
-        onReset={onReset}
+        onClose={onClose}
         onSelect={onSelect}
       />
     </View>
