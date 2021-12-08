@@ -7,6 +7,11 @@ A React Native component for picking time ranges
 ```sh
 npm install react-native-range-timepicker
 ```
+or 
+
+```sh
+yarn add react-native-range-timepicker
+```
 
 ## Usage
 
