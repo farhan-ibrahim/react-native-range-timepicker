@@ -2,6 +2,8 @@
 
 A React Native component for picking time ranges
 
+![Demo](https://j.gifs.com/k2OnWE.gif)
+
 ## Installation
 
 ```sh
