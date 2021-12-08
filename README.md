@@ -64,6 +64,15 @@ const styles = StyleSheet.create({
    
 ```
 
+## Props
+
+| Props | Description |
+| ----------- | ----------- |
+| visible (required) | State to show or hide the timepicker |
+| onSelect (required) | Function when select the time range. |
+| onClose (required) | Function when close the timepicker. |
+| title (optional) | Title will appear on top of the timepicker. |
+
 ## Contributing
 
 See the [contributing guide](CONTRIBUTING.md) to learn how to contribute to the repository and the development workflow.
