@@ -7,7 +7,7 @@ import TimePicker from './Timepicker';
 export type RangeTimePickerProps = {
   visible: boolean;
   title?: string;
-  onReset: () => void;
+  onClose: () => void;
   onSelect: (timeRange: { startTime: any; endTime: any }) => void;
 };
 
@@ -28,12 +28,17 @@ const TimeRangePicker: React.FC<RangeTimePickerProps> = (
     setSelectedEndTime(value);
   };
 
-  const onReset = () => {
+  const onCancel = () => {
     setSelectedStartTime('');
     setSelectedEndTime('');
-    props.onReset();
+    props.onClose();
     setIsVisible(false);
   };
+
+  const onBackdropPress = () => {
+    props.onClose();
+    setIsVisible(false)
+  }
 
   const onConfirm = () => {
     props.onSelect({
@@ -84,9 +89,9 @@ const TimeRangePicker: React.FC<RangeTimePickerProps> = (
     <View>
       <Modal
         isVisible={isVisible}
-        onBackdropPress={() => setIsVisible(false)}
-        animationInTiming={800}
-        animationOutTiming={800}
+        onBackdropPress={onBackdropPress}
+        animationInTiming={200}
+        animationOutTiming={200}
         style={styles.modal}
       >
         <View style={styles.container}>
@@ -107,7 +112,7 @@ const TimeRangePicker: React.FC<RangeTimePickerProps> = (
             <TimePicker onChangeValue={onChangeEndTime} />
           </View>
           <View style={styles.footer}>
-            <TouchableOpacity onPress={onReset}>
+            <TouchableOpacity onPress={onCancel}>
               <Text>Cancel</Text>
             </TouchableOpacity>
             <TouchableOpacity onPress={onConfirm} disabled={!isValid}>

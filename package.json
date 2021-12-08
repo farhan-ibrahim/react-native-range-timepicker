@@ -1,6 +1,6 @@
 {
   "name": "react-native-range-timepicker",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "description": "A React Native component for picking time ranges",
   "main": "lib/commonjs/index",
   "module": "lib/module/index",
@@ -147,6 +147,7 @@
   "dependencies": {
     "react-native-gesture-handler": "^2.0.0",
     "react-native-modal": "^13.0.0",
-    "react-native-picker-scrollview": "^1.0.1"
+    "react-native-picker-scrollview": "^1.0.1",
+    "user": "^0.0.0"
   }
 }
